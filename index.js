@@ -1,31 +1,41 @@
 const express = require('express');
-const router = express.Router();
-const {mongodbConnection} = require('./database');
+const TehModel = require('./tehC');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
 const port = 3100;
+const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
-mongodbConnection().then(() => {
-    app.listen(port, () =>{
-        console.log(`Server listening on port ${port}`);
+//Connect to DB and start server
+mongoose.connect(process.env.MONGO_URI, options)
+    .then(() => {
+        console.log('Connected to MongoDB');
+        app.listen(port, () => {
+            console.log(`Running on port ${port}`);
+        });
+    })
+    .catch((error) => {
+        console.error("Failed to connect to MongoDB:", error);
     });
-}).catch((error) => {
-    console.log("Connection failed: ", error);
-});
 
 /**
  * Get request endpoint
  */
-router.get('/api/data', async (req, res) => {
+app.get('/api/data', async (request, response) => {
     try {
-        const tehCData = await mongodbConnection();
-        const data = await tehCData.find();
-        res.json(data);
+        const data = await TehModel.find();
+        console.log('All data from collection:', data);
+        response.json(data);
     } catch (error) {
-        console.log("Error: ", error);
-        res.status(500).json({error: 'Cannot fetch data'});
+        console.error("Error fetching data:", error);
+        response.status(500).json({ error: 'Cannot fetch data' });
     }
 });
 
-module.exports = router;
+/**
+ * 404
+ */
+app.get('*', (request, response) => {
+    response.status(404).json({ error: 'Not found' });
+});
