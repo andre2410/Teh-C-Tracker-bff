@@ -2,8 +2,10 @@ const express = require('express');
 const TehModel = require('./tehC');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3100;
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
