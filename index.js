@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
-const port = 3100;
+const port = process.env.PORT || 3100;
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
 //Connect to DB and start server
