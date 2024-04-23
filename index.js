@@ -25,7 +25,6 @@ mongoose.connect(process.env.MONGO_URI, options)
 app.get('/api/data', async (request, response) => {
     try {
         const data = await TehModel.find();
-        console.log('All data from collection:', data);
         response.json(data);
     } catch (error) {
         console.error("Error fetching data:", error);
