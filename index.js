@@ -1,5 +1,5 @@
 const express = require('express');
-const TehModel = require('./tehC');
+const TehModel = require('./models/tehC');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
